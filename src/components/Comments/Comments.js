@@ -4,40 +4,37 @@ import './Comments.css';
 import axios from 'axios';
 import { useUserContext } from '../User/UserContext';
 import CommentPopup from '../Popup/CommentPopup';
-
+import CommentInput from './CommentInput';
 function Comments() {
   const { id } = useParams();
   const [comments, setComments] = useState(null);
   const user = useUserContext();
   const [selectedComment, setSelectedComment] = useState(null);
   const [forImages, setForImages] = useState([])
+  const fetchData = async () => {
+    try {
+      const commentsResponse = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/fetch-category/${id}`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Accept": "application/json",
+          "Authorization": `Bearer ${user?.user?.token}`
+        }
+      });
+  
+      const imagesResponse = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/fetch-users-of-posts-cat/${id}`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Accept": "application/json",
+          "Authorization": `Bearer ${user?.user?.token}`
+        }
+      });
+      setComments(commentsResponse?.data?.posts)
+      setForImages(imagesResponse?.data)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   useEffect(() => {
-    // Fetch the category data and comments based on id
-    const fetchData = async () => {
-      try {
-        const commentsResponse = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/fetch-category/${id}`, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Accept": "application/json",
-            "Authorization": `Bearer ${user?.user?.token}`
-          }
-        });
-    
-        const imagesResponse = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/fetch-users-of-posts-cat/${id}`, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Accept": "application/json",
-            "Authorization": `Bearer ${user?.user?.token}`
-          }
-        });
-        setComments(commentsResponse?.data?.posts)
-        setForImages(imagesResponse?.data)
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    
-
     fetchData();
   }, [id]);
   const handleCommentClick = (comment) => {
@@ -48,14 +45,12 @@ function Comments() {
     setSelectedComment(null);
   };
 
-  const handleCommentEdit = (commentId, editedTitle, editedDescription) => {
-    // Update the comments list with the edited comment
+  const handleCommentEdit = (commentId, editedDescription) => {
     setComments((prevComments) =>
       prevComments.map((comment) => {
         if (comment._id === commentId) {
           return {
             ...comment,
-            title: editedTitle,
             description: editedDescription
           };
         }
@@ -65,18 +60,44 @@ function Comments() {
   };
 
   if (!comments) {
-    return null; // Handle loading or error state
+    return null; 
   }
+  const handleAddComment = async (commentData) => {
+    try {
+        await axios.post(
+          `https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/post/create-post/${id}`,
+          {
+            description:commentData?.description,
+          },
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+              "Accept": 'application/json',
+              "Authorization": `Bearer ${user?.user.token}`
+  
+            }
+          }
+        )
+          
+      
+      fetchData();
 
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
+  };
   return (
-    <div className="comments-popup-overlay">
-      <div className="comments-popup-content">
+    <div className="comment-popup-overlay">
+      <div className="comment-popup-content">
         <button className="close-button">
           <Link to="/" className="link">
             Back to Categories
           </Link>
         </button>
-        <ul className="comment-list">
+      <CommentInput onSubmit={handleAddComment} />
+
+        <ul className="comments-list">
           {comments?.map((comment) => {
             const commentUser = forImages.find(user => user._id === comment.user);
             return (
@@ -95,9 +116,9 @@ function Comments() {
                     </div>
                   )}
                 </div>
-                <p>{comment?.title}</p>
                 <li className="comment" onClick={() => handleCommentClick(comment)}>
-                  {comment.description}
+                  
+                  {comment?.description}
                 </li>
               </div>
             );

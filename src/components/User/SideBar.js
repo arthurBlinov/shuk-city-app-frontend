@@ -12,7 +12,7 @@ import { styled } from '@mui/system';
 import { keyframes } from '@emotion/react';
 import { useUserContext } from './UserContext';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import CreatePostPopup from '../Popup/CreatePostPopup';
 import ChatPopup from '../Popup/ChatPopup';
 import AccountPopup from '../Popup/AccountPopup';
@@ -104,7 +104,7 @@ const StyledFooter = styled('div')({
   backgroundColor: '#1976d2',
   color: '#fff',
   animation: `${slideIn} 0.7s ease-in`,
-  marginTop: 'auto', // Move footer to the bottom
+  marginTop: 'auto', 
 });
 
 const SideBar = ({ open, handleDrawerClose }) => {
@@ -114,7 +114,6 @@ const SideBar = ({ open, handleDrawerClose }) => {
   const [isCreatePostPopupOpen, setIsCreatePostPopupOpen] = useState(false);
   const [isChatPopupOpen, setIsChatPopupOpen] = useState(false);
   const [isAccountPopupOpen, setIsAccountPopupOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null)
   const uploadInputRef = useRef(null);
   
   useEffect(() => {
@@ -128,7 +127,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
         }
       }
       try {
-        const response = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/${id}`, config)
+        const response = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/${user?.user?._id}`, config)
         setUserDetails(response?.data)
     }  
        catch (error) {
@@ -147,22 +146,19 @@ const SideBar = ({ open, handleDrawerClose }) => {
     setIsAccountPopupOpen(true);
   };
   const handleUploadPhoto = () => {
-    // Trigger the hidden file input's click event
     uploadInputRef.current.click();
   };
-  const handleFileSelect = async(e) => {
-    e.preventDefault();
-    await setSelectedFile(e?.target?.files[0])
-    updatePhotoFileUpload(); 
-
-  };
-  // Create a reference for the file input element
+ 
   const updatePhotoFileUpload = async(selectedFile) => {
     console.log(selectedFile);
+    const formData = new FormData(); 
+    formData.append('file', selectedFile);
+  
+    
     const config = {
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Content-Type": 'multipart/form-data',
+        "Content-Type": 'multipart/form-data;',
         "Accept": '*/*',
         "Authorization": `Bearer ${user?.user?.token}`
       }
@@ -170,16 +166,13 @@ const SideBar = ({ open, handleDrawerClose }) => {
     try {
       await axios.put(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/upload-profile-photo/${user?.user?._id}`,{
                 image: selectedFile
-      }, config)
+                // formData
+      }, config);
   }  
      catch (error) {
-      
+        console.log(error);
     }
-    // window?.location?.reload();
   }
-  // Function to handle file selection
-  
-  
   return (
     <StyledDrawer variant="persistent" anchor="left" open={open}>
       <div>
@@ -247,7 +240,9 @@ const SideBar = ({ open, handleDrawerClose }) => {
         accept="image/*"
         ref={uploadInputRef}
         style={{ display: 'none' }}
-        onChange={(e) => updatePhotoFileUpload(e?.target?.files[0])}
+        onChange={(e) => {
+          e.preventDefault(); 
+          updatePhotoFileUpload(e?.target?.files[0])}}
       />
     </StyledDrawer>
   );

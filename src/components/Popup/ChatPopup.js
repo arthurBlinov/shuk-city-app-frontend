@@ -51,15 +51,14 @@ const ChatPopup = ({ open, handleClose }) => {
     fetchUserChats();
   }, [theUser])
   const navigateToChat = (selectedUser) => {
-    // Use the navigate function to go to the chat route with the selectedUser's ID
     navigate(`/netcraft/user/certain-chat/${selectedUser._id}`, {state: {selectedUser}});
   };
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      maxWidth="sm" // Adjust the maximum width as needed
-      fullWidth // Use full width for responsiveness
+      maxWidth="sm" 
+      fullWidth 
     >
       <DialogContent>
         <IconButton
@@ -71,13 +70,12 @@ const ChatPopup = ({ open, handleClose }) => {
         >
           <CloseIcon />
         </IconButton>
-        {/* Chat content goes here */}
         <div style={{ padding: '16px' }}>
           <h2>Chat Receivers</h2>
           {receivers.map((receiver) => (
             <ReceiverWrapper
               key={receiver._id}
-              onClick={() => navigateToChat(receiver)} // Pass the selectedUser to navigate function
+              onClick={() => navigateToChat(receiver)} 
             >
               <ReceiverAvatar alt={receiver.name} src={receiver.profilePhoto} />
               <span>{receiver.name}</span>

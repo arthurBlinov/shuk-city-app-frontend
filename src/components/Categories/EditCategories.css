@@ -1,4 +1,4 @@
-.edit-category-container {
+ .edit-category-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 2rem;
@@ -38,7 +38,6 @@
     resize: none;
   }
   
-  /* Style the read-only textarea */
   .edit-category-form textarea[readonly] {
     background-color: #f7f7f7;
     cursor: not-allowed;
@@ -61,8 +60,7 @@
     background-color: #0056b3;
   }
 
-  /* Simple fade-in animation */
-  @keyframes fade-in {
+@keyframes fade-in {
     from {
       opacity: 0;
       transform: translateY(-10px);
@@ -73,8 +71,7 @@
     }
   }
   
-  /* Responsiveness */
-  @media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
     .edit-category-container {
       padding: 1rem;
       margin-top: 85px;

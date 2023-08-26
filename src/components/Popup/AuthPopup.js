@@ -8,9 +8,9 @@ function AuthPopup({ onClose }) {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [isSignIn, setIsSignIn] = useState(true);
-  const [showPopupSuccess, setShowPopupSuccess] = useState(false); // New state for showing the PopupSuccess component
+  const [showPopupSuccess, setShowPopupSuccess] = useState(false); 
 
-  const { updateUser, updateIsVerified } = useUserContext(); // Use the user context
+  const { updateUser, updateIsVerified } = useUserContext(); 
 
   const toggleMode = () => {
     setIsSignIn(!isSignIn);
@@ -23,7 +23,6 @@ function AuthPopup({ onClose }) {
                 "Accept": 'application/json',
             }
         }
-        console.log(email);
         const response = await axios.post('https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/login', {
             email: email,
             password: password
@@ -65,7 +64,6 @@ function AuthPopup({ onClose }) {
           updateUser(data);
           updateIsVerified(data.isAccountVerified);
   
-          // Show the PopupSuccess component
           handleLoginSuccess();
         } catch (error) {
           console.error('Sign-in error:', error);
@@ -78,7 +76,6 @@ function AuthPopup({ onClose }) {
           updateUser(data);
           updateIsVerified(data.isAccountVerified);
   
-          // Show the PopupSuccess component
           handleLoginSuccess();
         } catch (error) {
           console.error('Log-in error:', error);

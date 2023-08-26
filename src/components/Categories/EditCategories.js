@@ -3,12 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './EditCategories.css';
 import { useUserContext } from '../User/UserContext';
+import { useCategoryContext } from './CategoryContext';
 function EditCategory() {
   const { categoryId } = useParams();
   const [category, setCategory] = useState({});
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const user = useUserContext();
+  const {updateCategories} = useCategoryContext();
   const navigate = useNavigate();
   useEffect(() => {
     // Fetch the current category details from the API based on the category ID
@@ -62,6 +64,8 @@ function EditCategory() {
         }
       });
       // Redirect back to the category list or take any other appropriate action
+      
+      updateCategories();
       navigate('/');
       // You can use the `useNavigate` hook if you're using React Router v6
     } catch (error) {

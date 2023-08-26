@@ -1,6 +1,5 @@
 import React from 'react';
 import '../Categories/Categories.css';
-import { Link } from 'react-router-dom';
 import { useUserContext } from '../User/UserContext';
 import { useNavigate } from 'react-router-dom';
 function UserDetailsPopup({ selectedUser, closeUserPopup }) {

@@ -1,0 +1,35 @@
+
+.comment-input-container {
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+  
+.comment-input-container textarea {
+    display: block;
+    width: 80%;
+    padding: 8px;
+    margin: auto;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+
+}
+  
+.comment-input-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+  
+.comment-input-container button:hover {
+    background-color: #0056b3;
+}
+  

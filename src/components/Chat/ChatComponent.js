@@ -18,32 +18,7 @@ const ChatComponent = ({ selectedReceiver }) => {
     socket.emit('typing', `${username} is typing`);
   };
 
-  // const handleSendMessage = () => {
-  //   const chatMessage = {
-  //    message // Add the current room ID
-  //   };
-  //   console.log(socket);
-  //   socket.emit('sendMessage', chatMessage);
-  
-  //   setMessage('');
-  //    // Clear the message input
-  // };
-  // useEffect(() => {
-  //   // Listen for the 'messageResponse' event
-  //   // socket.on('privateRoomJoined', (data) => {
-  //   //   console.log(data);
-  //   // })
-    
-  
-  //   // Clean up event listener when component unmounts
-  //   // return () => {
-  //   //   socket.off('messageResponse');
-  //   // };
-  // });
-  // useEffect(() => {
-  //   // Scroll to bottom every time messages change
-  //   lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
-  // }, [messages]);
+
   const handleSendMessage = () => {
    
 socket.emit('create', { from: username, to: selectedReceiver?.name });
@@ -74,44 +49,7 @@ setMessage('');
       socket.off('messageResponse');
     };
   }, [currentRoom, selectedReceiver, username]);
-  // useEffect(() => {
-  //   socket.on('privateRoomJoined', (data) => {
-  //     console.log('Private room joined:', data);
-  //     setCurrentRoom(data);
-  //   });
-  
-   
-  //     socket.on('messageResponse', (data) => {
-  //       setMessages((prevMessages) => [...prevMessages, data]); // Update state correctly
-  //     });
-    
-  
-  //   // Clean up event listeners when the component unmounts or currentRoom changes
-  //   return () => {
-  //     socket.off('messageResponse');
-  //   };
-  // }, [currentRoom, chatId, selectedReceiver, user]);
-  // useEffect(() => {
-  //   // Emit join event when component mounts
-  //   const chatOfUsers = {
-  //     from: selectedReceiver,
-  //     to: username
-  //   };
-  //   socket.emit('join', chatOfUsers, (roomID) => {
-  //       setCurrentRoom(roomID); // Set the current room ID
-  //     });
 
-  //   // Listen for typing response
-  //   socket.on('typingResponse', (data) => setTypingStatus(data));
-
-  //   // Clean up event listeners
-  //   // return () => {
-  //   //   socket.off('typingResponse');
-  //   // };
-  //   // return () => {
-  //   //     socket.disconnect('disconnect')
-  //   // }
-  // }, [selectedReceiver, username]);
 
   return (
     <div>

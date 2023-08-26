@@ -6,12 +6,13 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import { useUserContext } from '../User/UserContext';
-
+import { useCategoryContext } from '../Categories/CategoryContext';
 const CreatePostPopup = ({ open, handleClose }) => {
   const [postContent, setPostContent] = useState('');
   const [postTitle, setPostTitle] = useState('');
   const [selectedFile, setSelectedFile] = useState({});
   const theUser = useUserContext();
+  const {updateCategories} = useCategoryContext()
   const handlePostContentChange = (e) => {
     setPostContent(e.target.value);
   };
@@ -26,23 +27,40 @@ const CreatePostPopup = ({ open, handleClose }) => {
   };
 
   const handleCreatePost = async() => {
-   
-    const config = {
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": 'multipart/form-data',
-            "Accept": '*/*',
-            "Authorization": `Bearer ${theUser?.user.token}`
-        }
-    }
-    
+     
     try {
-        await axios.post(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/create-category`,
+        if(selectedFile){
+            await axios.post(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/create-category`,
            {title: postTitle,
             description: postContent,
             image: selectedFile
         }
-        , config)
+        , {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": 'multipart/form-data;',
+                "Accept": '*/*',
+                "Authorization": `Bearer ${theUser?.user.token}`
+            }
+        })
+        }else{
+            await axios.post(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/create-category`,
+            {title: postTitle,
+             description: postContent,
+         }
+         , {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+              "Accept": 'application/json',
+              "Authorization": `Bearer ${theUser?.user.token}`
+
+            }
+          })  
+        }
+        await updateCategories()
+        handleClose();
+
     } catch (error) {
         console.log(error);
     }
@@ -50,7 +68,6 @@ const CreatePostPopup = ({ open, handleClose }) => {
     setPostTitle('');
     setPostContent('');
     setSelectedFile({});
-    handleClose();
   };
 
   return (

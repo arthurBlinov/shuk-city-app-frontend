@@ -11,9 +11,9 @@
     z-index: 1000;
     opacity: 0;
     animation: fade-in 0.5s ease-in-out forwards;
-  }
+}
   
-  .comments-popup-content {
+.comments-popup-content {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
@@ -22,9 +22,9 @@
     max-height: 90%;
     overflow-y: auto;
     animation: slide-up 0.5s ease-in-out forwards;
-  }
+}
   
-  .close-button {
+.close-button {
     background-color: #333;
     color: white;
     border: none;
@@ -33,31 +33,28 @@
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
     margin-bottom: 10px;
-  }
+}
   
-  .close-button:hover {
+.close-button:hover {
     background-color: #555;
-  }
+}
   
-  .category-title {
+.category-title {
     font-size: 20px;
     margin-bottom: 10px;
-  }
+}
   
-  .comment-list {
+.comment-list {
     list-style-type: none;
     padding: 0;
-  }
+}
   
   
   
-  .comment:hover {
+.comment:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  }
-/* CommentPopup.css */
-
-/* ... (previous styles) ... */
+}
 
 .comment-title-edit,
 .comment-content-edit {
@@ -72,16 +69,13 @@
 .comment-title-edit {
   font-size: 18px;
   font-weight: bold;
-  resize: none; /* Disable resizing for textarea */
+  resize: none; 
 }
 
 .comment-content-edit {
   font-size: 16px;
   resize: none;
-  height: 80px; /* Disable resizing for textarea */
+  height: 80px; 
 }
-
-/* ... (remaining styles) ... */
-
   
   

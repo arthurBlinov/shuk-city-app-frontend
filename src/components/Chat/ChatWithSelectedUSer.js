@@ -4,7 +4,7 @@ import { useUserContext } from '../User/UserContext';
 import axios from 'axios';
 import io from 'socket.io-client';
 import './ChatWithSelectedUser.css'
-const socket = io('https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/'); // Replace with your server URL
+const socket = io('https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/'); 
 
 function ChatWithSelectedUser() {
     const location = useLocation();
@@ -28,7 +28,6 @@ function ChatWithSelectedUser() {
                 }
               };
             const response = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/certain-chat/${selectedUser?._id}`, config)
-            console.log(response);
             if(response?.data){
                 setMessages(response.data?.messages)
             }
@@ -38,7 +37,7 @@ function ChatWithSelectedUser() {
     }, [theUser, selectedUser]);
     const handleSendMessage = () => {
         postChating(message, selectedUser);
-        // socket.emit('create', { from: theUser?.user?.name, to: selectedUser?.name });
+        
         const roomID = [theUser?.user?.name, selectedUser?.name].sort().join('');
         const chatMessage = {
             userMessage: theUser?.user?.name,
@@ -48,40 +47,18 @@ function ChatWithSelectedUser() {
         socket.emit('message', chatMessage);
         setMessage('');
         };
-        //   useEffect(() => {
-        //     const roomID = [theUser?.user?.name, selectedUser?.name].sort().join('');
-          
-        //     // socket.on('privateRoomJoined', (data) => {
-
-        //     //   setCurrentRoom(data);
-        //     // });
-        //     // console.log(currentRoom, roomID);
-        //     // if (currentRoom === roomID) {
-        //     socket.emit('joinRoom', roomID);
-        //       socket.on('messageResponse', (data) => {
-        //         setSocketMessages((prevMessages) => [...prevMessages, data]);
-        //     //   });
-        //     })
-          
-        //     return () => {
-        //       socket.off('messageResponse');
-        //     };
-        //   });
+        
         useEffect(() => {
             const roomID = [theUser?.user?.name, selectedUser?.name].sort().join('');
             socket.on('typingResponse', (data) => setTypingStatus(data));
             
-            // Emit an event to the server to join the room
             socket.emit('joinRoom',  {roomID});
            setCurrentRoom(roomID)
-            // Set the current room in the state
             socket.on('privateRoomJoined', data => {
                 setCurrentRoom(data);
 
             })
           
-            // Handle messages in the room
-            
             socket.on('messageResponse', (data) => {
               setSocketMessages((prevMessages) => [...prevMessages, data]);
               setTypingStatus('');
@@ -94,7 +71,6 @@ function ChatWithSelectedUser() {
             };
           })
           const handleTyping = (e) => {
-            // Emit typing event to the server only when selectedUser is typing
             if (e.target.value && selectedUser) {
               socket.emit('typing', {
                 roomID: currentRoom,
@@ -102,7 +78,6 @@ function ChatWithSelectedUser() {
                 isTyping: true,
               });
             } else {
-              // Emit not typing event to the server when input is empty or selectedUser is not available
               socket.emit('typing', {
                 roomID: currentRoom,
                 user: theUser?.user?.name,
@@ -130,53 +105,17 @@ function ChatWithSelectedUser() {
                     
                 }
           }
-//   return (
-//     <div className="chat-container">
-//   <div className="message-container">
-//     {messages ? messages?.map((message, index) => (
-//       <div key={index}>
-//         <div className="message-content">
-//           <p>{message?.message}</p>
-//         </div>
-//       </div>
-//     )) : (
-//       <div className="no-messages">No messages yet</div>
-//     )}
-//     {socketMessages && (socketMessages.map((socketMessage, index) => (
-//         <div key={index}>
-//         <div className="message-content">
-//           <p>{socketMessage}</p>
-//         </div>
-//       </div>
-//     )))}
-//   </div>
-//   <div className="message-input">
-//     <input
-//       type="text"
-//       placeholder="Write message"
-//       className="message"
-//       value={message}
-//       onKeyDown={handleTyping}
-//       onChange={(e) => setMessage(e.target.value)}
-//     />
-//             <p>{typingStatus}</p>
-    
-//     <button onClick={handleSendMessage}>SEND</button>
-//   </div>
-// </div>
 
-//   )
-useEffect(() => {
-    if(lastMessageRef.current && !lastSocketMessageRef.current){
-        lastMessageRef.current.scrollIntoView({behavior: 'smooth'})
-    }
-})
-useEffect(() => {
-    // Scroll to the last message whenever socketMessages change
-    if (lastSocketMessageRef.current) {
-      lastSocketMessageRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [socketMessages]);
+        useEffect(() => {
+            if(lastMessageRef.current && !lastSocketMessageRef.current){
+                lastMessageRef.current.scrollIntoView({behavior: 'smooth'})
+            }
+        })
+        useEffect(() => {
+            if (lastSocketMessageRef.current) {
+            lastSocketMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, [socketMessages]);
   return (
     
     <div className="container">

@@ -99,7 +99,7 @@ const handleChangePassword = async() => {
     setEditedEmail(e.target.value);
   };
   const handleClosePopup = () => {
-    setIsEditing(false); // Reset isEditing when closing the popup
+    setIsEditing(false); 
     handleClose();
   };
   const handleToggleChangePassword = (e) => {
@@ -143,14 +143,11 @@ const handleChangePassword = async() => {
           )}
         </p>
         {isEditing ? (
-          // Content for editing profile
           <div>
             <StyledInputContainer>
               <input
                 type="text"
                 name="name"
-                // value={userDetails?.name}
-                // onChange={handleInputChangeName}
                 value={editedName}
                 onChange={handleInputChangeName}
                 placeholder="Name"
@@ -159,8 +156,6 @@ const handleChangePassword = async() => {
               <input
                 type="email"
                 name="email"
-                // value={userDetails?.email}
-                // onChange={handleInputChangeEmail}
                 value={editedEmail}
                 onChange={handleInputChangeEmail}
                 placeholder="Email"
@@ -178,7 +173,6 @@ const handleChangePassword = async() => {
             <Button
               variant="outlined"
               startIcon={<DeleteIcon />}
-            //   style={{ marginTop: '10px' }}
             >
               Delete Account
             </Button>
@@ -193,16 +187,7 @@ const handleChangePassword = async() => {
             </Button>
           </div>
         ) : (
-          // Content for viewing profile
           <div>
-            {/* <IconButton
-              edge="end"
-              color="inherit"
-              onClick={handleEditClick}
-              aria-label="edit"
-            >
-              <EditIcon />
-            </IconButton> */}
             <Button
               variant="outlined"
               startIcon={<DeleteIcon />}
