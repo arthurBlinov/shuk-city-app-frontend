@@ -4,6 +4,7 @@ import axios from 'axios';
 import './EditCategories.css';
 import { useUserContext } from '../User/UserContext';
 import { useCategoryContext } from './CategoryContext';
+import baseUrl from '../../utils/baseURL';
 function EditCategory() {
   const { categoryId } = useParams();
   const [category, setCategory] = useState({});
@@ -16,7 +17,7 @@ function EditCategory() {
     // Fetch the current category details from the API based on the category ID
     const fetchCategory = async () => {
       try {
-        const response = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/fetch-category/${categoryId}`,
+        const response = await axios.get(`${baseUrl}/netcraft/category/fetch-category/${categoryId}`,
         {
             
             headers: {
@@ -49,16 +50,17 @@ function EditCategory() {
 
     // Prepare the updated category data
     const updatedCategory = {
-      ...category,
+      // ...category,
       title,
       description,
     };
 
     try {
       // Send a request to update the category based on the category ID
-      await axios.put(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/update-category/${categoryId}`, updatedCategory, {
+      await axios.put(`${baseUrl}/netcraft/category/update-category/${categoryId}`, updatedCategory, {
         headers: {
             "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
             "Accept": "application/json",
             "Authorization": `Bearer ${user?.user?.token}`
         }

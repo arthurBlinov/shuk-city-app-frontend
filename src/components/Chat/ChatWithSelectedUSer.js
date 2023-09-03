@@ -4,12 +4,15 @@ import { useUserContext } from '../User/UserContext';
 import axios from 'axios';
 import io from 'socket.io-client';
 import './ChatWithSelectedUser.css'
-const socket = io('https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/'); 
-
+import baseUrl from '../../utils/baseURL';
+const socket = io(`${baseUrl}/`); 
+// img
 function ChatWithSelectedUser() {
     const location = useLocation();
     const selectedUser = location?.state?.selectedUser;
-    const theUser = useUserContext()
+    const theUser = useUserContext();
+    // const {updateUser} = useUserContext();
+    // console.log(theUser);
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
     const [socketMessages, setSocketMessages] = useState([]);
@@ -27,20 +30,28 @@ function ChatWithSelectedUser() {
                   "Authorization": `Bearer ${theUser?.user?.token}`
                 }
               };
-            const response = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/certain-chat/${selectedUser?._id}`, config)
+            const response = await axios.get(`${baseUrl}/netcraft/user/certain-chat/${selectedUser?._id}`, config)
             if(response?.data){
                 setMessages(response.data?.messages)
             }
-
+            // let updatedUser;
+            // if(response?.data?.chatCreator === theUser?._id){
+            //   updatedUser = response?.data?.chatCreator;
+            //   updateUser(updatedUser)
+            // }else{
+            //   updatedUser = response?.data?.reciever;
+            //   updateUser(updatedUser)
+            // }
         }
         getCertainChat(); 
     }, [theUser, selectedUser]);
+    
     const handleSendMessage = () => {
         postChating(message, selectedUser);
         
         const roomID = [theUser?.user?.name, selectedUser?.name].sort().join('');
         const chatMessage = {
-            userMessage: theUser?.user?.name,
+            // userMessage: theUser?.user?.name,
             roomID,
             message,
         };
@@ -50,41 +61,40 @@ function ChatWithSelectedUser() {
         
         useEffect(() => {
             const roomID = [theUser?.user?.name, selectedUser?.name].sort().join('');
-            socket.on('typingResponse', (data) => setTypingStatus(data));
-            
+            console.log(roomID);
             socket.emit('joinRoom',  {roomID});
-           setCurrentRoom(roomID)
-            socket.on('privateRoomJoined', data => {
-                setCurrentRoom(data);
+          //  setCurrentRoom(roomID)
+            // socket.on('privateRoomJoined', data => {
+            //     setCurrentRoom(data);
 
-            })
+            // })
           
             socket.on('messageResponse', (data) => {
               setSocketMessages((prevMessages) => [...prevMessages, data]);
-              setTypingStatus('');
+              // setTypingStatus('');
 
             });
           
             return () => {
               socket.off('messageResponse');
-              socket.off('typingResponse');
+              // socket.off('typingResponse');
             };
           })
-          const handleTyping = (e) => {
-            if (e.target.value && selectedUser) {
-              socket.emit('typing', {
-                roomID: currentRoom,
-                user: theUser?.user?.name,
-                isTyping: true,
-              });
-            } else {
-              socket.emit('typing', {
-                roomID: currentRoom,
-                user: theUser?.user?.name,
-                isTyping: false,
-              });
-            }
-          };
+          // const handleTyping = (e) => {
+          //   if (e.target.value && selectedUser) {
+          //     socket.emit('typing', {
+          //       roomID: currentRoom,
+          //       user: theUser?.user?.name,
+          //       isTyping: true,
+          //     });
+          //   } else {
+          //     socket.emit('typing', {
+          //       roomID: currentRoom,
+          //       user: theUser?.user?.name,
+          //       isTyping: false,
+          //     });
+          //   }
+          // };
           
           const postChating = async(message, selectedUser) => {
             const config = {
@@ -96,7 +106,7 @@ function ChatWithSelectedUser() {
                 }
               };
                 try {
-                    await axios.post('https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/chat/create-chat',{
+                    await axios.post(`${baseUrl}/netcraft/chat/create-chat`,{
                         message: message,
                         reciever: selectedUser,
 
@@ -116,12 +126,19 @@ function ChatWithSelectedUser() {
             lastSocketMessageRef.current.scrollIntoView({ behavior: 'smooth' });
             }
         }, [socketMessages]);
+        function uint8ArrayToBase64(uint8Array) {
+          let binary = '';
+          for (let i = 0; i < uint8Array?.length; i++) {
+            binary += String.fromCharCode(uint8Array[i]);
+          }
+          return btoa(binary);
+        }
   return (
     
     <div className="container">
       <div className="msg-header">
         <div className="container1">
-          <img src="user1.png" className="msgimg" />
+          <img src={`data:${selectedUser?.profilePhoto?.image?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(selectedUser?.profilePhoto?.image?.data?.data)}`} className="msgimg" />
           <div className="active">
             <p>Chat with {selectedUser?.name}</p>
           </div>
@@ -138,14 +155,16 @@ function ChatWithSelectedUser() {
                 
                 {message?.sender === selectedUser?._id && (
                     <div>
-                        <div className="received-chats-img">
+                        {/* <div className="received-chats-img">
                   <img className="user-img" src={selectedUser?.profilePhoto} />
-                </div>
+                </div> */}
+                <p>{selectedUser?.name}</p>
                 <div className="received-msg">
                         <div className="received-msg-inbox">
                           <p>
                             {message?.message}
                           </p>
+                          
                         </div>
                       </div>
                     </div>
@@ -158,9 +177,10 @@ function ChatWithSelectedUser() {
                 
                 {message?.sender === theUser?.user?._id && (
                     <div>
-                        <div className="outgoing-chats-img">
+                        {/* <div className="outgoing-chats-img">
                     <img className="user-img" src={theUser?.user?.profilePhoto} />
-                  </div>
+                  </div> */}
+                  <p>me</p>
                     <div className="outgoing-msg">
                     <div className="outgoing-chats-msg">
                       <p className="multi-msg">
@@ -184,9 +204,9 @@ function ChatWithSelectedUser() {
                         {socketMessage?.userMessage}
                      {socketMessage?.userMessage !== theUser?.user?.name && (
                         <div>
-                             <div className="received-chats-img">
+                             {/* <div className="received-chats-img">
                        <img className="user-img" src={selectedUser?.profilePhoto} />
-                     </div>
+                     </div> */}
                    
                          <div className="received-msg">
                          <div className="received-msg-inbox">
@@ -204,9 +224,9 @@ function ChatWithSelectedUser() {
                    <div className="outgoing-chats">
                    {socketMessage?.userMessage === theUser?.user?.name && (
                     <div>
-                        <div className="outgoing-chats-img">
+                        {/* <div className="outgoing-chats-img">
                   <img className="user-img" src={theUser?.user?.profilePhoto} />
-                </div>
+                </div> */}
                
                     <div className="outgoing-msg">
                     <div className="outgoing-chats-msg">
@@ -238,7 +258,7 @@ function ChatWithSelectedUser() {
                       placeholder="Write message"
                       className="form-control"
                       value={message}
-                      onKeyDown={handleTyping}
+                      // onKeyDown={handleTyping}
                       onChange={(e) => setMessage(e.target.value)}
               />
 

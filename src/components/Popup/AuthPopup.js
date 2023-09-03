@@ -3,6 +3,7 @@ import { useUserContext } from '../User/UserContext';
 import './AuthPopup.css';
 import axios from 'axios';
 import PopupSuccess from './PopupSuccess';
+import baseUrl from '../../utils/baseURL';
 function AuthPopup({ onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +24,7 @@ function AuthPopup({ onClose }) {
                 "Accept": 'application/json',
             }
         }
-        const response = await axios.post('https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/login', {
+        const response = await axios.post(`${baseUrl}/netcraft/user/login`, {
             email: email,
             password: password
         }, config)
@@ -37,7 +38,7 @@ function AuthPopup({ onClose }) {
                 "Accept": 'application/json',
             }
         }
-        const response = await axios.post('https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/registrate', {
+        const response = await axios.post(`${baseUrl}/netcraft/user/registrate`, {
             name: name,
             email: email,
             password: password

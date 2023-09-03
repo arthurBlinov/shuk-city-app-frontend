@@ -1,12 +1,14 @@
  .edit-category-container {
-    max-width: 800px;
+    /* text-align: center; */
+    max-width: 100%;
     margin: 0 auto;
     padding: 2rem;
     background-color: #f7f7f7;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     animation: fade-in 0.5s ease-in-out;
-    margin-top: 150px;
+    margin-top: -150px;
+    height: auto;
   }
   
   .edit-category-title {
@@ -74,8 +76,8 @@
 @media screen and (max-width: 768px) {
     .edit-category-container {
       padding: 1rem;
-      margin-top: 85px;
-      max-width: 420px;
+      /* margin-top: 85px; */
+      /* max-width: 420px; */
     }
     .edit-category-title {
       font-size: 1.2rem;

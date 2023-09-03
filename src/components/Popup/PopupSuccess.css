@@ -48,4 +48,8 @@
       transform: scale(1);
     }
 }
-  
+@media screen and (max-width: 767px) {
+    .close-button{
+        height: auto;
+    }
+}

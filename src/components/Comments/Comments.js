@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useUserContext } from '../User/UserContext';
 import CommentPopup from '../Popup/CommentPopup';
 import CommentInput from './CommentInput';
+import baseUrl from '../../utils/baseURL';
 function Comments() {
   const { id } = useParams();
   const [comments, setComments] = useState(null);
@@ -13,7 +14,7 @@ function Comments() {
   const [forImages, setForImages] = useState([])
   const fetchData = async () => {
     try {
-      const commentsResponse = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/fetch-category/${id}`, {
+      const commentsResponse = await axios.get(`${baseUrl}/netcraft/category/fetch-category/${id}`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Accept": "application/json",
@@ -21,7 +22,7 @@ function Comments() {
         }
       });
   
-      const imagesResponse = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/fetch-users-of-posts-cat/${id}`, {
+      const imagesResponse = await axios.get(`${baseUrl}/netcraft/category/fetch-users-of-posts-cat/${id}`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Accept": "application/json",
@@ -65,7 +66,7 @@ function Comments() {
   const handleAddComment = async (commentData) => {
     try {
         await axios.post(
-          `https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/post/create-post/${id}`,
+          `${baseUrl}/netcraft/post/create-post/${id}`,
           {
             description:commentData?.description,
           },
@@ -87,6 +88,13 @@ function Comments() {
       console.error('Error adding comment:', error);
     }
   };
+  function uint8ArrayToBase64(uint8Array) {
+    let binary = '';
+    for (let i = 0; i < uint8Array?.length; i++) {
+      binary += String.fromCharCode(uint8Array[i]);
+    }
+    return btoa(binary);
+  }
   return (
     <div className="comment-popup-overlay">
       <div className="comment-popup-content">
@@ -107,11 +115,11 @@ function Comments() {
                     <p className="user-name">My Comment</p>
                   ) : (
                     <div className="user-profile">
-                      <img
-                        src={commentUser?.profilePhoto}
+                      {/* <img
+                        src={`data:${commentUser?.profilePhoto?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(commentUser?.profilePhoto?.image?.data?.data)}`}
                         alt="User Photo"
                         className="user-profile-photo"
-                      />
+                      /> */}
                       <p>{commentUser?.name}</p>
                     </div>
                   )}

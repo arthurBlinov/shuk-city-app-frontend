@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import { useUserContext } from '../User/UserContext';
-
-const socket = io('https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/'); // Replace with your server URL
+import baseUrl from '../../utils/baseURL';
+const socket = io(`${baseUrl}/`); // Replace with your server URL
 
 const ChatComponent = ({ selectedReceiver }) => {
   const user = useUserContext();
   const [username, setUsername] = useState(user?.user?.name);
   const [message, setMessage] = useState('');
   const [typingStatus, setTypingStatus] = useState('');
-  const lastMessageRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [currentRoom, setCurrentRoom] = useState('');
   

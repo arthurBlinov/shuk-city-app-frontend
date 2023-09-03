@@ -12,7 +12,7 @@ import { TextField } from '@mui/material';
 import { styled } from '@mui/system';
 import axios from 'axios';
 import { useUserContext } from '../User/UserContext';
-
+import baseUrl from '../../utils/baseURL';
 const StyledDialog = styled(Dialog)({
   '& .MuiDialog-paper': {
     maxWidth: '400px',
@@ -47,7 +47,7 @@ const AccountPopup = ({ open, handleClose, userDetails }) => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const theUser = useUserContext();
-  
+  const {updateUser} = useUserContext()
   useEffect(() => {
     setEditedName(userDetails?.name);
     setEditedEmail(userDetails?.email);
@@ -65,13 +65,24 @@ const AccountPopup = ({ open, handleClose, userDetails }) => {
           "Authorization": `Bearer ${theUser?.user?.token}`
         }
     }
-    await axios.put(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/update-profile/${userDetails?._id}`,{
+    await axios.put(`${baseUrl}/netcraft/user/update-profile/${userDetails?._id}`,{
                 name: editedName,
                 email: editedEmail
     }, config)
     
+    
     setIsEditing(!isEditing);
     handleClose();
+    const userWithUpdatedDetails = {
+        name: editedName,
+        email: editedEmail,
+        isAccountVerified: theUser?.user?.isAccountVerified,
+        isAdmin: theUser?.user?.isAdmin,
+        profilePhoto: theUser?.user?.profilePhoto,
+        token: theUser?.user?.token,
+        _id: theUser?.user?._id
+    }
+    updateUser(userWithUpdatedDetails);
     window.location.reload();
 };
   
@@ -84,7 +95,7 @@ const handleChangePassword = async() => {
           "Authorization": `Bearer ${theUser?.user?.token}`
         }
     }
-    await axios.put(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/password`,{
+    await axios.put(`${baseUrl}/netcraft/user/password`,{
             password: newPassword
     }, config)
     setIsEditing(!isEditing);
@@ -105,7 +116,13 @@ const handleChangePassword = async() => {
   const handleToggleChangePassword = (e) => {
     setShowChangePassword(!showChangePassword);
   };
-
+  function uint8ArrayToBase64(uint8Array) {
+    let binary = '';
+    for (let i = 0; i < uint8Array?.length; i++) {
+      binary += String.fromCharCode(uint8Array[i]);
+    }
+    return btoa(binary);
+  }
   return (
     <StyledDialog open={open} onClose={handleClosePopup}>
       <StyledDialogContent>
@@ -118,7 +135,7 @@ const handleChangePassword = async() => {
         >
           <CloseIcon />
         </IconButton>
-        <StyledAvatar alt="User Avatar" src={userDetails?.profilePhoto} />
+        <StyledAvatar alt="User Avatar" src={userDetails?.profilePhoto?.fileType ? `data:${userDetails?.profilePhoto?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(userDetails?.profilePhoto?.image?.data?.data)}` : null}/>
         <h2>
           {!isEditing ? (
             <span>

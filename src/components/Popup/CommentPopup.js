@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './CommentPopup.css';
 import axios from 'axios';
-
+import baseUrl from '../../utils/baseURL';
 function CommentPopup({ comment, onClose, user, onCommentEdit }) {
   const isUserComment = user._id === comment.user;
   const [isEditMode, setIsEditMode] = useState(false);
@@ -25,7 +25,7 @@ function CommentPopup({ comment, onClose, user, onCommentEdit }) {
     };
     try {
       // Call the API to update the comment
-      await axios.put(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/post/update-post/${comment?._id}`, {
+      await axios.put(`${baseUrl}/netcraft/post/update-post/${comment?._id}`, {
         description: editedDescription
       }, config);
 

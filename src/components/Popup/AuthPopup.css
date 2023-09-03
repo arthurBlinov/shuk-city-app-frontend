@@ -77,4 +77,14 @@
 .close-button:hover {
     background-color: #ccc;
 }
-  
+@media screen and (max-width: 768px) {
+    .auth-popup-overlay{
+        height: auto;
+        top: auto;
+        margin-top: 90px;
+        /* bottom: auto; */
+
+        /* bottom: 0; */
+    }
+    
+}

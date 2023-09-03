@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
-
+import baseUrl from '../../utils/baseURL';
 const ReceiverWrapper = styled('div')({
   display: 'flex',
   alignItems: 'center',
@@ -41,7 +41,7 @@ const ChatPopup = ({ open, handleClose }) => {
       }
       
       try {
-        const response = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/receivers/${theUser?.user?._id}`, config);
+        const response = await axios.get(`${baseUrl}/netcraft/user/receivers/${theUser?.user?._id}`, config);
         setReceivers(response?.data);
       } catch (error) {
         console.error(error);
@@ -53,6 +53,13 @@ const ChatPopup = ({ open, handleClose }) => {
   const navigateToChat = (selectedUser) => {
     navigate(`/netcraft/user/certain-chat/${selectedUser._id}`, {state: {selectedUser}});
   };
+  function uint8ArrayToBase64(uint8Array) {
+    let binary = '';
+    for (let i = 0; i < uint8Array?.length; i++) {
+      binary += String.fromCharCode(uint8Array[i]);
+    }
+    return btoa(binary);
+  }
   return (
     <Dialog
       open={open}
@@ -77,7 +84,7 @@ const ChatPopup = ({ open, handleClose }) => {
               key={receiver._id}
               onClick={() => navigateToChat(receiver)} 
             >
-              <ReceiverAvatar alt={receiver.name} src={receiver.profilePhoto} />
+              <ReceiverAvatar alt={receiver.name} src={receiver?.profilePhoto?.fileType ? `data:${receiver?.profilePhoto?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(receiver?.profilePhoto?.image?.data?.data)}` : null} />
               <span>{receiver.name}</span>
             </ReceiverWrapper>
           ))}

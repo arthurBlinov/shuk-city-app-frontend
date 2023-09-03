@@ -41,7 +41,7 @@ function App() {
               <Route exact path='/netcraft/category/fetch-comments/:id' element={<Comments/>}/>
           </Routes>
           {showFooter && (
-            <div style={{marginTop: '40px'}}>
+            <div>
              <Footer/>
 
             </div>

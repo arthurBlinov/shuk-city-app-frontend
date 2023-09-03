@@ -1,6 +1,7 @@
 // CategoryContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import baseURL from '../../utils/baseURL';
 
 const CategoryContext = createContext();
 
@@ -10,7 +11,7 @@ export const CategoryProvider = ({ children }) => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
-        'https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/category/fetch-categories'
+        `${baseURL}/netcraft/category/fetch-categories`
       );
       setCategories(response.data);
     } catch (error) {

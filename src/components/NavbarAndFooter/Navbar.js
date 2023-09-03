@@ -37,12 +37,23 @@ function Navbar() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Toggle the mobile menu
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isMenuOpen ? 'show-menu' : ''}`}>
       <div className="logo" onClick={handleNavigate}>
         Your Logo
       </div>
+      <div className='toggle-menu-buttons'>
+      <button className="menu-btn" onClick={toggleMenu}>☰</button> {/* Hamburger icon */}
+      <button className="menu-btn close" onClick={toggleMenu}>×</button> {/* Close icon */}
+      </div>
+      
+      <div className="mobile-menu">
       <div className="auth-buttons">
         {userContext.user ? (
           <>
@@ -67,13 +78,14 @@ function Navbar() {
             <button className="login-button" onClick={openAuthPopup}>
               Log In
             </button>
-            <div className="auth-link">
+            {/* <div className="auth-link">
               {open ? (
                 <SideBar open={open} handleDrawerClose={handleDrawerClose} />
               ) : null}
-            </div>
+            </div> */}
           </>
         )}
+        </div>
       </div>
       {authPopupOpen && <AuthPopup onClose={closeAuthPopup} />}
     </nav>

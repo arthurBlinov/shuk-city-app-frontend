@@ -5,7 +5,6 @@ const UserContext = createContext();
 export function UserProvider({ children }) {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
   const [isVerified, setIsVerified] = useState(localStorage.getItem('isVerified') === 'true' || false);
-
   const updateUser = (userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
