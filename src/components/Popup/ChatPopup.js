@@ -10,6 +10,8 @@ import { useState } from 'react';
 import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import baseUrl from '../../utils/baseURL';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 const ReceiverWrapper = styled('div')({
   display: 'flex',
   alignItems: 'center',
@@ -29,6 +31,8 @@ const ChatPopup = ({ open, handleClose }) => {
   const theUser = useUserContext();
   const [receivers, setReceivers] = useState([]);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   useEffect(() => {
     const fetchUserChats = async() => {
       const config = {
@@ -60,37 +64,46 @@ const ChatPopup = ({ open, handleClose }) => {
     }
     return btoa(binary);
   }
+  console.log(receivers);
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      maxWidth="sm" 
-      fullWidth 
-    >
-      <DialogContent>
-        <IconButton
-          edge="end"
-          color="inherit"
-          onClick={handleClose}
-          aria-label="close"
-          style={{ position: 'absolute', top: '8px', right: '8px' }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <div style={{ padding: '16px' }}>
-          <h2>Chat Receivers</h2>
-          {receivers.map((receiver) => (
-            <ReceiverWrapper
-              key={receiver._id}
-              onClick={() => navigateToChat(receiver)} 
-            >
-              <ReceiverAvatar alt={receiver.name} src={receiver?.profilePhoto?.fileType ? `data:${receiver?.profilePhoto?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(receiver?.profilePhoto?.image?.data?.data)}` : null} />
-              <span>{receiver.name}</span>
-            </ReceiverWrapper>
-          ))}
-        </div>
-      </DialogContent>
-    </Dialog>
+    <>
+    {isSmallScreen && (
+        <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="sm" 
+        fullScreen={isSmallScreen}
+        fullWidth 
+        style={{height: '150px', maxWidth: '60%', overflowY: 'auto', margin: 'auto', marginTop: '45%'}}
+      >
+        <DialogContent style={{display: 'flex', flexDirection: 'column'}}>
+          <IconButton
+            edge="end"
+            color="inherit"
+            onClick={handleClose}
+            aria-label="close"
+            style={{ position: 'absolute', top: '8px', right: '8px' }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <div style={{ padding: '16px'}}>
+            <h2 style={{marginBottom: '40px'}}>Chat Receivers</h2>
+            {receivers.map((receiver) => (
+              <ReceiverWrapper
+                key={receiver._id}
+                onClick={() => navigateToChat(receiver)}
+                style={{display: 'flex', flexDirection: 'row'}} 
+              >
+                {/* <ReceiverAvatar alt={receiver.name} src={receiver?.profilePhoto?.image?.fileType ? `data:${receiver?.profilePhoto?.image?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(receiver?.profilePhoto?.image?.data?.data)}` : null} /> */}
+                <span>{receiver.name}</span>
+              </ReceiverWrapper>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+    )}
+    </>
+    
   );
 };
 

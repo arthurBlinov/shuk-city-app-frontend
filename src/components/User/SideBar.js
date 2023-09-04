@@ -157,7 +157,6 @@ const SideBar = ({ open, handleDrawerClose }) => {
   }, [user]);
 
   const handleCategoriesPopup = () => {
-    console.log('hello');
     setIsCreatePostPopupOpen(true);
   };
 
@@ -224,7 +223,6 @@ const SideBar = ({ open, handleDrawerClose }) => {
             <Typography margin={'35px'} variant="h6" gutterBottom>
               {userDetails?.name}
             </Typography>
-            {/* <Typography variant="subtitle1">{userDetails?.profession}</Typography> */}
             <Typography variant="subtitle2">
               <i className="fas fa-envelope"></i> {userDetails?.email}
             </Typography>
