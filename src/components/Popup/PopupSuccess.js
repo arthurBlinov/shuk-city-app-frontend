@@ -5,9 +5,9 @@ function PopupSuccess({ onClose }) {
   return (
     <div className="popup-success-overlay">
       <div className="popup-success">
-        <div className="success-message">Logged in successfully!</div>
+        <div className="success-message">יש, נכנסת</div>
         <button className="close-button" onClick={onClose}>
-          Close
+         לסגור
         </button>
       </div>
     </div>

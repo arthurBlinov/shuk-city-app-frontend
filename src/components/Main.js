@@ -3,7 +3,7 @@ import Categories from './Categories/Categories'
 
 function Main() {
   return (
-    <div>
+    <div style={{direction: 'rtl'}}>
         <Categories/>
     </div>
   )

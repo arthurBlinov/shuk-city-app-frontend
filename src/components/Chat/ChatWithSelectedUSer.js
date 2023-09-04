@@ -63,11 +63,7 @@ function ChatWithSelectedUser() {
             const roomID = [theUser?.user?.name, selectedUser?.name].sort().join('');
             console.log(roomID);
             socket.emit('joinRoom',  {roomID});
-          //  setCurrentRoom(roomID)
-            // socket.on('privateRoomJoined', data => {
-            //     setCurrentRoom(data);
-
-            // })
+          
           
             socket.on('messageResponse', (data) => {
               setSocketMessages((prevMessages) => [...prevMessages, data]);
@@ -77,24 +73,9 @@ function ChatWithSelectedUser() {
           
             return () => {
               socket.off('messageResponse');
-              // socket.off('typingResponse');
             };
           })
-          // const handleTyping = (e) => {
-          //   if (e.target.value && selectedUser) {
-          //     socket.emit('typing', {
-          //       roomID: currentRoom,
-          //       user: theUser?.user?.name,
-          //       isTyping: true,
-          //     });
-          //   } else {
-          //     socket.emit('typing', {
-          //       roomID: currentRoom,
-          //       user: theUser?.user?.name,
-          //       isTyping: false,
-          //     });
-          //   }
-          // };
+          
           
           const postChating = async(message, selectedUser) => {
             const config = {
@@ -126,69 +107,96 @@ function ChatWithSelectedUser() {
             lastSocketMessageRef.current.scrollIntoView({ behavior: 'smooth' });
             }
         }, [socketMessages]);
-        
+        function uint8ArrayToBase64(uint8Array) {
+          let binary = '';
+          for (let i = 0; i < uint8Array?.length; i++) {
+            binary += String.fromCharCode(uint8Array[i]);
+          }
+          return btoa(binary);
+        }
   return (
-    <div className='chat-body'>
-	<section className="chatbox">
-		<section className="chat-window">
-      {messages?.map(mess => (
-        <div key={mess?._id} ref={messages.length - 1 && lastMessageRef}>
-          {/* <p>{mess?.message}</p> */}
-        {mess?.sender === selectedUser?._id && (
+      <div className="container">
+    <div className="msg-header">
+      <div className="container1">
+        <img src={`data:${selectedUser?.profilePhoto?.image?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(selectedUser?.profilePhoto?.image?.data?.data)}`} className="msgimg" />
+        <div className="active">
+          <p>Chat with {selectedUser?.name}</p>
+        </div>
+      </div>
+    </div>
 
-              <article className="msg-container msg-remote" id="msg-0">
-              <div className="msg-box">
-                <div className="flr">
-                  <div className="messages">
-                    <p className="msg" id="msg-0">
-                      {mess?.message}
+    <div className="chat-page">
+      <div className="msg-inbox">
+        <div className="chats">
+          <div className="msg-page">
+          {messages ? (messages.map((message) => (
+              <div key={message?._id}  ref={messages.length - 1 && lastMessageRef}>
+              <div className="received-chats">
+              
+              {message?.sender === selectedUser?._id && (
+                  <div>
+                      
+              <p>{selectedUser?.name}</p>
+              <div className="received-msg">
+                      <div className="received-msg-inbox">
+                        <p>
+                          {message?.message}
+                        </p>
+                        
+                      </div>
+                    </div>
+                  </div>
+                      
+              
+              )}
+
+              </div>
+              <div className="outgoing-chats">
+              
+              {message?.sender === theUser?.user?._id && (
+                  <div>
+                      
+                <p>me</p>
+                  <div className="outgoing-msg">
+                  <div className="outgoing-chats-msg">
+                    <p className="multi-msg">
+                     {message?.message}
                     </p>
+
                   </div>
                 </div>
-                <p className='user-name'>{selectedUser?.name}</p>
-
-              </div>
-              </article>
-
-        )} 
-        
-        {mess?.sender === theUser?.user?._id && (
-          <article className="msg-container msg-self" id="msg-0">
-          <div className="msg-box">
-            <div className="flr">
-              <div className="messages">
-                <p className="msg" id="msg-1">
-                  {mess?.message}
-                </p>
-                
-              </div>
+                  </div>
+                  
+              )}
+              
             </div>
-            <p className='user-name'>me</p>
-          </div>
-        </article>
-        )}
-        </div>
-      ))}
-      {socketMessages && socketMessages.map((socketMessage, index) => (
+                   </div>
+                      ))) : ''}
+           
+          {socketMessages && socketMessages.map((socketMessage, index) => (
               <div key={index} ref={index === socketMessages.length - 1 ? lastSocketMessageRef : null}>
-                    <p className='user-name'>{socketMessage?.userMessage}</p>
-                    {socketMessage?.userMessage !== theUser?.user?.name && (
-                       <article className="msg-container msg-self" id="msg-0">
-                       <div className="msg-box">
-                         <div className="flr">
-                           <div className="messages">
-                             <p className="msg" id="msg-1">
-                               {socketMessage?.message}
-                             </p>
-                             
-                           </div>
-                         </div>
-                         <p>me</p>
+                  
+                   <div className="received-chats">
+                      {socketMessage?.userMessage}
+                   {socketMessage?.userMessage !== theUser?.user?.name && (
+                      <div>
+                           
+                 
+                       <div className="received-msg">
+                       <div className="received-msg-inbox">
+                         <p className="single-msg">
+                          {socketMessage?.message}
+                         </p>
                        </div>
-                     </article>
+                     </div>
+                      </div>
                   
                   )}
-                  {socketMessage?.userMessage === theUser?.user?.name && (
+
+                  
+                 </div>
+                 <div className="outgoing-chats">
+                 {socketMessage?.userMessage === theUser?.user?.name && (
                   <div>
                      
              
@@ -203,11 +211,21 @@ function ChatWithSelectedUser() {
                   </div>
               
               )}
-                  </div>
-        ))}
-		</section> 
-		<div className="chat-input">
-    <input
+              
+            </div>
+                 
+              </div>
+                  
+          ))}
+       
+            
+          </div>
+        </div>
+
+
+        <div className="msg-bottom">
+          <div className="input-group">
+            <input
               type="text"
                     placeholder="Write message"
                     className="form-control"
@@ -216,151 +234,17 @@ function ChatWithSelectedUser() {
                     onChange={(e) => setMessage(e.target.value)}
             />
 
+            <span className="input-group-text">
               <button onClick={handleSendMessage} className="send-button">Send</button>
-		</div>
-	</section>
-</div>
-  )
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 }
 
 export default ChatWithSelectedUser;
 
-
-// (
     
-//   <div className="container">
-//     <div className="msg-header">
-//       <div className="container1">
-//         <img src={`data:${selectedUser?.profilePhoto?.image?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(selectedUser?.profilePhoto?.image?.data?.data)}`} className="msgimg" />
-//         <div className="active">
-//           <p>Chat with {selectedUser?.name}</p>
-//         </div>
-//       </div>
-//     </div>
-
-//     <div className="chat-page">
-//       <div className="msg-inbox">
-//         <div className="chats">
-//           <div className="msg-page">
-//           {messages ? (messages.map((message) => (
-//               <div key={message?._id}  ref={messages.length - 1 && lastMessageRef}>
-//               <div className="received-chats">
-              
-//               {message?.sender === selectedUser?._id && (
-//                   <div>
-//                       {/* <div className="received-chats-img">
-//                 <img className="user-img" src={selectedUser?.profilePhoto} />
-//               </div> */}
-//               <p>{selectedUser?.name}</p>
-//               <div className="received-msg">
-//                       <div className="received-msg-inbox">
-//                         <p>
-//                           {message?.message}
-//                         </p>
-                        
-//                       </div>
-//                     </div>
-//                   </div>
-                      
-              
-//               )}
-
-//               </div>
-//               <div className="outgoing-chats">
-              
-//               {message?.sender === theUser?.user?._id && (
-//                   <div>
-//                       {/* <div className="outgoing-chats-img">
-//                   <img className="user-img" src={theUser?.user?.profilePhoto} />
-//                 </div> */}
-//                 <p>me</p>
-//                   <div className="outgoing-msg">
-//                   <div className="outgoing-chats-msg">
-//                     <p className="multi-msg">
-//                      {message?.message}
-//                     </p>
-
-//                   </div>
-//                 </div>
-//                   </div>
-                  
-//               )}
-              
-//             </div>
-//                    </div>
-//                       ))) : ''}
-           
-//           {socketMessages && socketMessages.map((socketMessage, index) => (
-//               <div key={index} ref={index === socketMessages.length - 1 ? lastSocketMessageRef : null}>
-                  
-//                    <div className="received-chats">
-//                       {socketMessage?.userMessage}
-//                    {socketMessage?.userMessage !== theUser?.user?.name && (
-//                       <div>
-//                            {/* <div className="received-chats-img">
-//                      <img className="user-img" src={selectedUser?.profilePhoto} />
-//                    </div> */}
-                 
-//                        <div className="received-msg">
-//                        <div className="received-msg-inbox">
-//                          <p className="single-msg">
-//                           {socketMessage?.message}
-//                          </p>
-//                        </div>
-//                      </div>
-//                       </div>
-                  
-//                   )}
-
-                  
-//                  </div>
-//                  <div className="outgoing-chats">
-//                  {socketMessage?.userMessage === theUser?.user?.name && (
-//                   <div>
-//                       {/* <div className="outgoing-chats-img">
-//                 <img className="user-img" src={theUser?.user?.profilePhoto} />
-//               </div> */}
-             
-//                   <div className="outgoing-msg">
-//                   <div className="outgoing-chats-msg">
-//                     <p>
-//                       {socketMessage?.message}
-//                     </p>
-
-//                   </div>
-//                 </div>
-//                   </div>
-              
-//               )}
-              
-//             </div>
-                 
-//               </div>
-                  
-//           ))}
-       
-            
-//           </div>
-//         </div>
-
-
-//         <div className="msg-bottom">
-//           <div className="input-group">
-//             <input
-//               type="text"
-//                     placeholder="Write message"
-//                     className="form-control"
-//                     value={message}
-//                     // onKeyDown={handleTyping}
-//                     onChange={(e) => setMessage(e.target.value)}
-//             />
-
-//             <span className="input-group-text">
-//               <button onClick={handleSendMessage} className="send-button">Send</button>
-//             </span>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   </div>
-// );

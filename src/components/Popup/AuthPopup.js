@@ -93,48 +93,24 @@ function AuthPopup({ onClose }) {
         <form onSubmit={handleSubmit}>
           <input
             type="email"
-            placeholder="Email"
+            placeholder="מייל"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder="סיסמה"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          {!isSignIn && (
-            <input
-              type="text"
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          )}
-          <button type="submit">{isSignIn ? 'Sign In' : 'Sign Up'}</button>
+          
+          <button type="submit">להיכנס</button>
         </form>
-        <div className="toggle-mode">
-          {isSignIn ? (
-            <>
-              Don't have an account?{' '}
-              <span className="toggle-link" onClick={toggleMode}>
-                Sign Up
-              </span>
-            </>
-          ) : (
-            <>
-              Already have an account?{' '}
-              <span className="toggle-link" onClick={toggleMode}>
-                Sign In
-              </span>
-            </>
-          )}
-        </div>
+        
         <button className="close-button" onClick={onClose}>
-          Close
+          לסגור
         </button>
       </div>
     </div>

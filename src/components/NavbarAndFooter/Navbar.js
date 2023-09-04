@@ -37,23 +37,12 @@ function Navbar() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Toggle the mobile menu
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
   return (
-    <nav className={`navbar ${isMenuOpen ? 'show-menu' : ''}`}>
+    <nav className="navbar">
       <div className="logo" onClick={handleNavigate}>
-        Your Logo
+        לוגו
       </div>
-      <div className='toggle-menu-buttons'>
-      <button className="menu-btn" onClick={toggleMenu}>☰</button> {/* Hamburger icon */}
-      <button className="menu-btn close" onClick={toggleMenu}>×</button> {/* Close icon */}
-      </div>
-      
-      <div className="mobile-menu">
       <div className="auth-buttons">
         {userContext.user ? (
           <>
@@ -65,27 +54,26 @@ function Navbar() {
                   className="sidebar-button"
                   onClick={handleOpenSidebar}
                 >
-                  Open Account
+                  לפתוח פרופיל
                 </button>
               )}
             </div>
             <button className="auth-button" onClick={handleLogout}>
-              Log Out
+            לצאת  
             </button>
           </>
         ) : (
           <>
             <button className="login-button" onClick={openAuthPopup}>
-              Log In
+              להיכנס
             </button>
-            {/* <div className="auth-link">
+            <div className="auth-link">
               {open ? (
                 <SideBar open={open} handleDrawerClose={handleDrawerClose} />
               ) : null}
-            </div> */}
+            </div>
           </>
         )}
-        </div>
       </div>
       {authPopupOpen && <AuthPopup onClose={closeAuthPopup} />}
     </nav>

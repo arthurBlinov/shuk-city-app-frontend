@@ -47,7 +47,7 @@ const AccountPopup = ({ open, handleClose, userDetails }) => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const theUser = useUserContext();
-  const {updateUser} = useUserContext()
+  
   useEffect(() => {
     setEditedName(userDetails?.name);
     setEditedEmail(userDetails?.email);
@@ -70,19 +70,9 @@ const AccountPopup = ({ open, handleClose, userDetails }) => {
                 email: editedEmail
     }, config)
     
-    
     setIsEditing(!isEditing);
     handleClose();
-    const userWithUpdatedDetails = {
-        name: editedName,
-        email: editedEmail,
-        isAccountVerified: theUser?.user?.isAccountVerified,
-        isAdmin: theUser?.user?.isAdmin,
-        profilePhoto: theUser?.user?.profilePhoto,
-        token: theUser?.user?.token,
-        _id: theUser?.user?._id
-    }
-    updateUser(userWithUpdatedDetails);
+    localStorage.setItem('user')
     window.location.reload();
 };
   

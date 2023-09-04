@@ -12,14 +12,12 @@ import { styled } from '@mui/system';
 import { keyframes } from '@emotion/react';
 import { useUserContext } from './UserContext';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import CreatePostPopup from '../Popup/CreatePostPopup';
 import ChatPopup from '../Popup/ChatPopup';
 import AccountPopup from '../Popup/AccountPopup';
 import baseUrl from '../../utils/baseURL';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-
-const drawerWidth = 260;
+const drawerWidth = 440;
 
 const fadeIn = keyframes`
   from {
@@ -40,8 +38,7 @@ const slideIn = keyframes`
 `;
 
 const StyledDrawer = styled(Drawer)({
-  display: 'flex',
-  flexDirection: 'column',
+  width: drawerWidth,
   flexShrink: 0,
   transition: 'width 0.55s',
   animation: `${fadeIn} 0.7s ease-in`,
@@ -55,16 +52,17 @@ const StyledDrawer = styled(Drawer)({
 const StyledDrawerHeader = styled('div')({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'flex-end',
   padding: '0 8px',
-  minHeight: '64px', // Add a minimum height for the header
+  justifyContent: 'flex-end',
 });
 
 const StyledUserInfo = styled('div')({
+  width: drawerWidth,
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   padding: '16px',
+  marginTop: '38px',
   background: '#0d47a1',
   cursor: 'pointer',
   borderRadius: '8px',
@@ -78,17 +76,15 @@ const StyledUserInfo = styled('div')({
 const StyledIconsContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
+  marginTop: '16px',
   alignItems: 'center',
-  // marginTop: '16px',
 });
 
 const StyledIcon = styled('div')({
-  marginBottom: '40px',
+  fontSize: '32px',
+  marginBottom: '12px',
   color: '#ffcc00',
   transition: 'transform 0.3s, color 0.3s',
-  '& svg': {  // This targets all SVGs (icons) inside the StyledIcon
-    fontSize: '33px',  // Set the desired fontSize for the icons
-  },
   '&:hover': {
     color: '#ffd600',
     transform: 'scale(1.2)',
@@ -96,20 +92,9 @@ const StyledIcon = styled('div')({
   },
 });
 
-
-const StyledAvatarContainer = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  marginTop: '22px',
-
-});
-
 const StyledAvatar = styled(Avatar)({
   width: '80px',
   height: '80px',
-  marginTop: '25px',
-  marginBottom: '10px'
 });
 
 const StyledFooter = styled('div')({
@@ -120,7 +105,7 @@ const StyledFooter = styled('div')({
   backgroundColor: '#1976d2',
   color: '#fff',
   animation: `${slideIn} 0.7s ease-in`,
-  marginTop: 'auto',
+  marginTop: 'auto', 
 });
 
 const SideBar = ({ open, handleDrawerClose }) => {
@@ -130,70 +115,60 @@ const SideBar = ({ open, handleDrawerClose }) => {
   const [isChatPopupOpen, setIsChatPopupOpen] = useState(false);
   const [isAccountPopupOpen, setIsAccountPopupOpen] = useState(false);
   const uploadInputRef = useRef(null);
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
+  
   useEffect(() => {
-    const getUserDetails = async () => {
+    const getUserDetails = async() => {
       const config = {
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
           "Accept": 'application/json',
-          "Authorization": `Bearer ${user?.user?.token}`,
-        },
-      };
-      try {
-        const response = await axios.get(
-          `${baseUrl}/netcraft/user/${user?.user?._id}`,
-          config
-        );
-        setUserDetails(response?.data);
-      } catch (error) {
-        console.error(error);
+          "Authorization": `Bearer ${user?.user?.token}`
+        }
       }
-    };
+      try {
+        const response = await axios.get(`${baseUrl}/netcraft/user/${user?.user?._id}`, config)
+        setUserDetails(response?.data)
+    }  
+       catch (error) {
+        
+      }
+    }
     getUserDetails();
   }, [user]);
-
   const handleCategoriesPopup = () => {
     setIsCreatePostPopupOpen(true);
-  };
-
+  }
   const handleChatPopup = () => {
     setIsChatPopupOpen(true);
   };
-
   const handleAccountPopup = () => {
     setIsAccountPopupOpen(true);
   };
-
   const handleUploadPhoto = () => {
     uploadInputRef.current.click();
   };
-
-  const updatePhotoFileUpload = async (selectedFile) => {
+ 
+  const updatePhotoFileUpload = async(selectedFile) => {
+       console.log(selectedFile);
     const config = {
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'multipart/form-data;',
-        Accept: '*/*',
-        Authorization: `Bearer ${user?.user?.token}`,
-      },
-    };
-    try {
-      await axios.put(
-        `${baseUrl}/netcraft/user/upload-profile-photo/${user?.user?._id}`,
-        {
-          image: selectedFile,
-        },
-        config
-      );
-    } catch (error) {
-      console.error(error);
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": 'multipart/form-data;',
+        "Accept": '*/*',
+        // "Accept": "application/json",
+        "Authorization": `Bearer ${user?.user?.token}`
+      }
     }
-  };
-
+    try {
+      await axios.put(`${baseUrl}/netcraft/user/upload-profile-photo/${user?.user?._id}`,{
+                image: selectedFile
+      }, config);
+  }  
+     catch (error) {
+        console.log(error);
+    }
+  }
   function uint8ArrayToBase64(uint8Array) {
     let binary = '';
     for (let i = 0; i < uint8Array?.length; i++) {
@@ -201,52 +176,48 @@ const SideBar = ({ open, handleDrawerClose }) => {
     }
     return btoa(binary);
   }
-
   return (
-    <>
-    {isSmallScreen && (
-      <StyledDrawer variant='temporary' anchor="left" open={open}>
-      <div style={{display: 'grid'}}>
+    <StyledDrawer variant="persistent" anchor="left" open={open}>
+      <div>
         <StyledDrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>
         </StyledDrawerHeader>
         <StyledUserInfo>
-          <StyledAvatarContainer>
-            <StyledAvatar
-              alt="User Avatar"
-              src={`data:${userDetails?.profilePhoto?.image?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(
-                userDetails?.profilePhoto?.image?.data?.data
-              )}`}
-            />
-            <Typography margin={'35px'} variant="h6" gutterBottom>
-              {userDetails?.name}
-            </Typography>
-            <Typography variant="subtitle2">
-              <i className="fas fa-envelope"></i> {userDetails?.email}
-            </Typography>
-          </StyledAvatarContainer>
+          <StyledAvatar
+            alt="User Avatar"
+            src={`data:${userDetails?.profilePhoto?.image?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(userDetails?.profilePhoto?.image?.data?.data)}`}
+          />
+          <Typography variant="h6" gutterBottom>
+            {userDetails?.name}
+          </Typography>
+          <Typography variant="subtitle1">{userDetails?.profession}</Typography>
+          <Typography variant="subtitle2">
+            <i className="fas fa-envelope"></i> {userDetails?.email}
+          </Typography>
         </StyledUserInfo>
         <StyledIconsContainer>
           <StyledIcon>
             <div onClick={handleCategoriesPopup}>
-              <ForumIcon />
+            <ForumIcon />
             </div>
           </StyledIcon>
           <StyledIcon>
-            <div onClick={handleChatPopup}>
-              <ChatIcon />
-            </div>
-          </StyledIcon>
+          <div onClick={handleChatPopup}>
+            <ChatIcon />
+          </div>
+        </StyledIcon>
+
           <StyledIcon>
             <div onClick={handleAccountPopup}>
-              <AccountCircleIcon />
+            <AccountCircleIcon />
             </div>
           </StyledIcon>
           <StyledIcon>
             <div onClick={handleUploadPhoto}>
-              <PhotoCameraIcon />
+            <PhotoCameraIcon />
+
             </div>
           </StyledIcon>
         </StyledIconsContainer>
@@ -259,13 +230,13 @@ const SideBar = ({ open, handleDrawerClose }) => {
         handleClose={() => setIsCreatePostPopupOpen(false)}
       />
       <ChatPopup
-        open={isChatPopupOpen}
-        handleClose={() => setIsChatPopupOpen(false)}
+          open={isChatPopupOpen}
+          handleClose={() => setIsChatPopupOpen(false)}
       />
       <AccountPopup
-        open={isAccountPopupOpen}
-        handleClose={() => setIsAccountPopupOpen(false)}
-        userDetails={userDetails}
+          open={isAccountPopupOpen}
+          handleClose={() => setIsAccountPopupOpen(false)}
+          userDetails={userDetails}
       />
       <input
         type="file"
@@ -273,13 +244,10 @@ const SideBar = ({ open, handleDrawerClose }) => {
         ref={uploadInputRef}
         style={{ display: 'none' }}
         onChange={(e) => {
-          e.preventDefault();
-          updatePhotoFileUpload(e?.target?.files[0]);
-        }}
+          e.preventDefault(); 
+          updatePhotoFileUpload(e?.target?.files[0])}}
       />
     </StyledDrawer>
-    )}
-    </>
   );
 };
 
@@ -304,4 +272,69 @@ export default SideBar;
 
 
 
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import './UserAccount.css';
+// import { useParams } from 'react-router-dom';
+// import { useUserContext } from '../User/UserContext';
 
+// function UserAccount() {
+//   const [user, setUser] = useState({});
+//   const [categories, setCategories] = useState([]);
+//   const {id} = useParams();
+//   const userContext = useUserContext();
+//   console.log(userContext);
+//   useEffect(() => {
+//     // Fetch user data and categories from the API
+//     const fetchUserData = async () => {
+//       try {
+//         const config = {
+//           headers: {
+//             "Access-Control-Allow-Origin": "*",
+//             "Content-Type": "application/json",
+//             "Accept": 'application/json',
+//             "Authorization": `Bearer ${userContext?.user?.token}`
+//           }
+//         }
+//         const response = await axios.get(`https://forum-netcraft-backend-0ea87a3f4f22.herokuapp.com/netcraft/user/${id}`, config);
+//         setUser(response.data);
+//         setCategories(response.data.categories);
+//         console.log(categories);
+//       } catch (error) {
+//         console.error('Error fetching user data:', error);
+//       }
+//     };
+
+//     fetchUserData();
+//   }, []);
+
+//   return (
+//     <div className="user-account-container">
+//   <div className="user-profile">
+//     <div className="profile-photo">
+//       <img src={user.profilePhoto} alt="User Profile" />
+//     </div>
+//     <div className="profile-details">
+//       <h2>{user.name}</h2>
+//       <p>{user.email}</p>
+//     </div>
+//   </div>
+//   <div className="divider"></div>
+//   <div className="user-categories">
+//     <h3>Your Categories</h3>
+//     <ul>
+//       {categories.map((category) => (
+//         <li key={category.id}>
+//           <div className="category-title">{category.title}</div>
+//           <div className="category-description">{category.description.substring(0, 35)}</div>
+//         </li>
+//       ))}
+//     </ul>
+//   </div>
+// </div>
+
+
+//   );
+// }
+
+// export default UserAccount;
