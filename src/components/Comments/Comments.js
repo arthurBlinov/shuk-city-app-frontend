@@ -102,7 +102,7 @@ function Comments() {
 
         <ul className="comments-list">
           {comments?.map((comment) => {
-            const commentUser = forImages.find(user => user._id === comment.user);
+            const commentUser = forImages.find(user => user?._id === comment?.user);
             return (
               <div key={comment?._id}>
                 <div className="comment-header">

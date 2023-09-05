@@ -121,8 +121,8 @@ function Categories() {
                   ) : ''}
                    {user && (user?._id === category?.user?._id) ? (
                       <div className="category-user-actions">
-                        <button onClick={() => handleEditCategory(category?._id)}>Edit</button>
-                        <button onClick={() => handleDeleteCategory(category?._id)}>Delete</button>
+                        <button onClick={() => handleEditCategory(category?._id)}>לערוך</button>
+                        <button onClick={() => handleDeleteCategory(category?._id)}>למחוק</button>
                       </div>
                     ) : ''}
                 </div>

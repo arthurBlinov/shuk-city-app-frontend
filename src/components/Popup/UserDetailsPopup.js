@@ -36,18 +36,17 @@ function UserDetailsPopup({ selectedUser, closeUserPopup }) {
     return btoa(binary);
   }
   return (
-    <div className="popup-overlay">
+    <div className="popup-overlay" style={{direction: 'rtl'}}>
       <div className="popup-content">
         <img src={`data:${userDetails?.profilePhoto?.image?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(userDetails?.profilePhoto?.image?.data?.data)}`} 
         alt="" className="popup-user-photo" />
-        <div className="popup-user-name">name: {selectedUser?.name}</div>
-        <div className="popup-user-email">email: {selectedUser.email}</div>
-        <div className="popup-user-blocked">ifBlocked: {selectedUser.ifBlocked ? 'yes' : 'no'}</div>
+        <div className="popup-user-name">שם: {selectedUser?.name}</div>
+        <div className="popup-user-email">מייל:{selectedUser.email}</div>
         {isLoggedIn ? (
           
-            <button onClick={handleChatClick}>Chat with {selectedUser?.name}</button>
+            <button onClick={handleChatClick}>צאט עם {selectedUser?.name}</button>
         ) : null}
-        <button onClick={closeUserPopup}>Close</button>
+        <button onClick={closeUserPopup}>לסגור</button>
       </div>
     </div>
   );
