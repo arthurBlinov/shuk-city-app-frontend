@@ -150,7 +150,6 @@ const SideBar = ({ open, handleDrawerClose }) => {
   };
  
   const updatePhotoFileUpload = async(selectedFile) => {
-       console.log(selectedFile);
     const config = {
       headers: {
         "Access-Control-Allow-Origin": "*",

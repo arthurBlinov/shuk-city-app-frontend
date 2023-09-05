@@ -1,11 +1,11 @@
 .categories {
-  display: inline-block;
   visibility: visible;
-  position: relative;
-  margin-top: 640px;
+  margin-top: 180px;
+  height: 100vh;
+  width: 100%;
 }
 .first-category{
-  margin-top: 300px;
+  margin-top: 200px;
 }
 
 /* .category {
@@ -28,7 +28,7 @@
   cursor: pointer;
   width: 650px;
   position: relative;
-  margin-top: -50px;
+  margin-top: 20px;
 }
 
 

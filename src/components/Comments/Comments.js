@@ -88,19 +88,14 @@ function Comments() {
       console.error('Error adding comment:', error);
     }
   };
-  function uint8ArrayToBase64(uint8Array) {
-    let binary = '';
-    for (let i = 0; i < uint8Array?.length; i++) {
-      binary += String.fromCharCode(uint8Array[i]);
-    }
-    return btoa(binary);
-  }
+  
+  
   return (
-    <div className="comment-popup-overlay">
+    <div className="comment-popup-overlay" style={{direction: 'rtl'}}>
       <div className="comment-popup-content">
         <button className="close-button">
           <Link to="/" className="link">
-            Back to Categories
+            לדף הראשי
           </Link>
         </button>
       <CommentInput onSubmit={handleAddComment} />
@@ -112,14 +107,10 @@ function Comments() {
               <div key={comment?._id}>
                 <div className="comment-header">
                   {comment?.user === user?.user?._id ? (
-                    <p className="user-name">My Comment</p>
+                    <p className="user-name">הקומנט שלי</p>
                   ) : (
                     <div className="user-profile">
-                      {/* <img
-                        src={`data:${commentUser?.profilePhoto?.fileType};charset=utf-8;base64,${uint8ArrayToBase64(commentUser?.profilePhoto?.image?.data?.data)}`}
-                        alt="User Photo"
-                        className="user-profile-photo"
-                      /> */}
+                      
                       <p>{commentUser?.name}</p>
                     </div>
                   )}

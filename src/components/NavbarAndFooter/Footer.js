@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <p>&copy; 2023 Your Company. All rights reserved.</p>
+        <p>&copy; זכויות יוצרים 2023. ארתור בלינוב</p>
         <div className="social-icons">
           {/* <a href="#" target="_blank" rel="noopener noreferrer"> */}
             <i className="fab fa-facebook"></i>

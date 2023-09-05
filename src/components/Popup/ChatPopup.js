@@ -64,6 +64,7 @@ const ChatPopup = ({ open, handleClose }) => {
     <Dialog
       open={open}
       onClose={handleClose}
+      style={{direction: 'rtl'}}
       maxWidth="sm" 
       fullWidth 
     >
@@ -78,7 +79,7 @@ const ChatPopup = ({ open, handleClose }) => {
           <CloseIcon />
         </IconButton>
         <div style={{ padding: '16px' }}>
-          <h2>Chat Receivers</h2>
+          <h2>הצ'אטים שלך</h2>
           {receivers.map((receiver) => (
             <ReceiverWrapper
               key={receiver._id}

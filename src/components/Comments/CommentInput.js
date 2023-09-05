@@ -19,13 +19,13 @@ const CommentInput = ({ onSubmit }) => {
   };
 
   return (
-    <div className="comment-input-container">
+    <div className="comment-input-container" style={{direction: 'rtl'}}>
        <textarea
-        placeholder="Write your comment..."
+        placeholder="לכתוב קומנט..."
         value={commentDescription}
         onChange={handleDescriptionChange}
       ></textarea>
-      <button onClick={handleSubmit}>Add Comment</button>
+      <button onClick={handleSubmit}>להוסיף קומנט</button>
     </div>
   );
 };

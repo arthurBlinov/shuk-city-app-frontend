@@ -65,7 +65,7 @@ const CreatePostPopup = ({ open, handleClose }) => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm" style={{direction: 'rtl'}}>
       <DialogContent>
         <IconButton
           edge="end"
@@ -77,11 +77,11 @@ const CreatePostPopup = ({ open, handleClose }) => {
           <CloseIcon />
         </IconButton>
         <Typography variant="h6" gutterBottom>
-          Create a New Post
+          ליצור פוסט
         </Typography>
         <input
           type="text"
-          placeholder="Post Title"
+          placeholder="כותרת"
           value={postTitle}
           onChange={handlePostTitleChange}
           style={{
@@ -94,7 +94,7 @@ const CreatePostPopup = ({ open, handleClose }) => {
         />
         <textarea
           rows="4"
-          placeholder="Write your post here..."
+          placeholder="לכתוב פוסט..."
           value={postContent}
           onChange={handlePostContentChange}
           style={{
@@ -124,7 +124,7 @@ const CreatePostPopup = ({ open, handleClose }) => {
               transition: 'background-color 0.3s',
             }}
           >
-            Create Post
+            ליצור פוסט
           </button>
         </div>
       </DialogContent>

@@ -114,7 +114,7 @@ const handleChangePassword = async() => {
     return btoa(binary);
   }
   return (
-    <StyledDialog open={open} onClose={handleClosePopup}>
+    <StyledDialog open={open} onClose={handleClosePopup} style={{direction: 'rtl'}}>
       <StyledDialogContent>
         <IconButton
           edge="end"
@@ -133,7 +133,7 @@ const handleChangePassword = async() => {
               <EditIcon style={{ marginRight: '5px', cursor: 'pointer' }} onClick={handleClick}/>
             </span>
           ) : (
-            <p>Editing Mode</p>
+            <p>מצב עריכה</p>
           )}
         </h2>
         <p>
@@ -175,13 +175,13 @@ const handleChangePassword = async() => {
               startIcon={<EditIcon />}
               style={{marginRight: '5px'}}
             >
-              Save Changes
+              לשמור שינוים
             </Button>
             <Button
               variant="outlined"
               startIcon={<DeleteIcon />}
             >
-              Delete Account
+              למחוק פרופיל
             </Button>
             <Button
               variant="outlined"
@@ -190,7 +190,7 @@ const handleChangePassword = async() => {
               onClick={handleToggleChangePassword}
 
             >
-              Change Password
+              שינוי סיסמה
             </Button>
           </div>
         ) : (
@@ -200,7 +200,7 @@ const handleChangePassword = async() => {
               startIcon={<DeleteIcon />}
               style={{ marginTop: '16px' }}
             >
-              Delete Account
+              למחוק פרופיל
             </Button>
             <Button
               variant="outlined"
@@ -209,7 +209,7 @@ const handleChangePassword = async() => {
               onClick={handleToggleChangePassword}
               
             >
-              Change Password
+              שינוי סיסמה
             </Button>
             
           </div>
@@ -242,7 +242,7 @@ const handleChangePassword = async() => {
                   fullWidth
                   style={{ marginTop: '16px' }}
                 >
-                  Change Password
+                  שינוי סיסמה
                 </Button>
               </div>
             )}

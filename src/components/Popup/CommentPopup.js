@@ -43,10 +43,10 @@ function CommentPopup({ comment, onClose, user, onCommentEdit }) {
   };
 
   return (
-    <div className="comment-popup-overlay">
+    <div className="comment-popup-overlay" style={{direction: 'rtl'}}>
       <div className="comment-popup-content">
         <button className="close-button" onClick={onClose}>
-          Close
+          לסגור
         </button>
         {isEditMode ? (
           <>
@@ -66,13 +66,13 @@ function CommentPopup({ comment, onClose, user, onCommentEdit }) {
           <div className="comment-actions">
             {isEditMode ? (
               <>
-                <button onClick={handleSaveEdit}>Save</button>
-                <button onClick={handleCancelEdit}>Cancel</button>
+                <button onClick={handleSaveEdit}>לשמור</button>
+                <button onClick={handleCancelEdit}>לבטל</button>
               </>
             ) : (
-              <button onClick={handleEditComment}>Edit</button>
+              <button onClick={handleEditComment}>לערוך</button>
             )}
-            <button onClick={handleDeleteComment}>Delete</button>
+            <button onClick={handleDeleteComment}>למחוק</button>
           </div>
         )}
       </div>
